@@ -7,10 +7,11 @@ Puppet::Type.type(:package).provide(:brew, :parent => Puppet::Provider::Package)
 
   has_feature :versionable
 
+
   # Fix Puppet 3.0 #16779, pass $HOME to brew command.
   if Puppet::Util::Package.versioncmp(Puppet.version, '3.0') >= 0
     has_command(:brew, "/usr/local/bin/brew") do
-      environment({ 'HOME' => ENV['HOME'] })
+      environment({ 'HOME' => ENV['HOME'], 'PATH' => ENV['PATH'] + ':/usr/local/bin' })
     end
   else
     commands :brew => "/usr/local/bin/brew"
